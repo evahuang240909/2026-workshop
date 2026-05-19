@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部門互動式座位查詢系統 v3</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; background-color: #f1f5f9; color: #1e293b; }
+        .container { max-width: 1500px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { text-align: center; margin-top: 0; font-size: 26px; color: #0f172a; letter-spacing: 1px; }
+        
+        /* 搜尋區塊 */
+        .search-area { display: flex; justify-content: center; margin-bottom: 20px; }
+        input { width: 450px; padding: 12px 18px; border: 2px solid #cbd5e1; border-radius: 30px; font-size: 16px; text-align: center; transition: all 0.2s; }
+        input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+
+        /* 文字版結果顯示區塊 */
+        .result-panel { max-width: 600px; margin: 0 auto 25px auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: none; }
+        .result-panel.active { display: block; }
+        .result-title { font-weight: bold; color: #1e3a8a; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 10px; font-size: 15px; }
+        .result-item { background: white; border-left: 4px solid #3b82f6; padding: 10px 15px; margin-bottom: 8px; border-radius: 0 4px 4px 0; font-size: 13px; line-height: 1.5; box-shadow: 0 1px 3px rgba(0,0,0,0.02); white-space: pre-line; }
+        .result-item strong { color: #0f172a; font-size: 14px; }
+
+        /* 座位圖網格設定 - 1個 Row 標籤 + 19個座位 */
+        .grid-container { display: grid; grid-template-columns: 85px repeat(19, minmax(70px, 1fr)); gap: 5px; overflow-x: auto; padding: 10px 0; }
+        
+        /* 座標軸樣式 */
+        .header-cell { display: flex; align-items: center; justify-content: center; font-weight: bold; background: #e2e8f0; color: #475569; font-size: 13px; border-radius: 4px; padding: 5px; height: 35px; text-align: center; }
+        .row-label { font-weight: bold; background: #cbd5e1; color: #334155; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 4px; text-align: center; }
+
+        /* 座位格子基礎樣式 */
+        .seat { display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 4px; font-size: 11px; text-align: center; min-height: 65px; cursor: pointer; transition: all 0.15s ease; overflow: hidden; white-space: pre-line; line-height: 1.3; }
+        .seat:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10; background: #f1f5f9; }
+        
+        /* 空白與保留座位樣式 */
+        .seat.empty { background: #ffffff; border: 1px dashed #cbd5e1; color: #cbd5e1; }
+        .seat.reserved { background: #fee2e2; border-color: #fca5a5; color: #991b1b; font-weight: bold; }
+
+        /* 當搜尋匹配成功時的發亮樣式 */
+        .seat.highlight { background: #fde047 !important; border-color: #eab308 !important; color: #000000 !important; font-weight: bold; box-shadow: 0 0 10px #fde047; transform: scale(1.04); z-index: 5; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🔍 部門互動式座位地圖 (最新完整版)</h2>
+        <div class="search-area">
+            <input type="text" id="mapSearch" placeholder="輸入名字、姓氏、中文名或職稱 (如: ed, jessica, omi)..." oninput="highlightMap()">
+        </div>
+
+        <div class="result-panel" id="textResultPanel">
+            <div class="result-title">📋 完美的文字搜尋結果：</div>
+            <div id="textResultContent"></div>
+        </div>
+
+        <div class="grid-container" id="seatMapGrid"></div>
+    </div>
+
+    <script>
+        // 根據最新座位圖圖片 (12th Row 到 1st Row，1 到 19 欄) 完整校正資料
+        const seatData = [
+            // 12th Row
+            ["", "", "", "", "", "", "", "", "", "", "", "", "", "Cust CM\nJessica Chao\n(趙雨培)", "Cust CM\nTting Yin\n(尹婷)", "Cust CM\nRuby Luo\n(羅勻佐)", "Cust CM\nPenny Liao\n(廖珮妏)", "Cust CM\nJenn Cheng\n(鄭螢)", "Cust CM\nMimi Hung\n(洪冠嘉)"],
+            
+            // 11th Row
+            ["DM\nPeggy Yang\n(楊珮綺)", "DM\nAnnie Wang\n(王暄晴)", "Operation\nCeline Shang\n(尚儀)", "Operation\nAimee Li\n(李秀娟)", "Operation\nVanessa Chuang\n(莊謹熒)", "Operation\nRuby Chang\n(張汝伊)", "", "", "", "", "", "", "", "FAE\nEric Lo\n(羅晧華)", "S&D CM\nClaire Lin\n(林宣慧)", "S&D CM\nEmma Chuang\n(莊詠華)", "S&D CM\nNicky Yang\n(楊蕓瀚)", "S&D CM\nElena Huang\n(黃子昀)", "S&D CM\nYen Chen\n(陳品諺)"],
+            
+            // 10th Row
+            ["DM\nKelly Cho\n(卓芊孜)", "DM\nAnn Chien\n(簡婉婷)", "DM\nJill Lin\n(林欣宜)", "DM\nSarah Lin\n(林思妤)", "DM\nOmi Wang\n(王愛萍)", "DM\nSarah Chen\n(陳怡臻)", "S&D PM\nJean Shao\n(邵小真)", "S&D PM\nJeff Chou\n(周睿彬)", "S&D RD\nDanny Lu\n(呂少穎)", "S&D RD\nCarey Wu\n(吳科賢)", "S&D RD\nCloud Yu\n(游智鈞)", "FAE\nJason Chen\n(陳忠鑫)", "FAE\nJacky Chen\n(陳進輝)", "IndoPac PM\nAnnie Yang\n(楊安寧)", "S&D CM\nLeo Li\n(李韋賢)", "S&D CM\nCarina Hung\n(洪廷瑀)", "S&D CM\nParker Lee\n(李孟杰)", "IndoPac MKT\nJenny Tu\n(杜佩珊)", "IndoPac MKT\nJane Lee\n(李易臻)"],
+            
+            // 9th Row
+            ["DM\nVera Chen\n(陳筱君)", "DM\nJenny Cheng\n(鄭宇彣)", "DT Planning\nDaniel Wu\n(吳慧德)", "DT Planning\nAllen Lee\n(李德育)", "DT RD PM\nJulie Lia\n(賴炴璇)", "CEM PM\nManny Chang\n(張毅欽)", "DT PMKT\nFrank Ho\n(何銘峯)", "DT PMKT\nJerry Tsai\n(蔡志豪)", "Cust PMKT\nChris Peng\n(彭士豪)", "Cust PMKT\nRita Lin\n(林昱君)", "MNT PMKT\nUna Lee\n(李晨帆)", "PMKT\nMilia Lin\n(林子瑛)", "CZ\nPaul Liao", "IN\nShridhar Vidyadhar\nMagadum", "IN\nPankaj Narang", "IndoPac MKT\nShania Cheng\n(程雅歆)", "IndoPac MKT\nLeona Liu\n(柳虹伊)", "IndoPac MKT\nAdam Huang\n(黃宇宸)", "IndoPac MKT\nIrene Chien\n(簡玉晴)"],
+            
+            // 8th Row
+            ["Cust Sales\nVivian Fang\n(方郁寧)", "Cust Sales\nMoses Tsai\n(蔡裕翔)", "Cust PM\nKai Hung\n(洪新凱)", "Cust RD PM\nEwan Chang\n(張富傑)", "DT RPM\nSabrina Chiang\n(江之瑜)", "DT RPM\nDavid Wu\n(吳壹豐)", "UK\nTina Chuang", "UK\nTerry Feng", "UK\nAdrian Liu", "UK\nPin Hsuan Shao", "TR\nMutlu Akisan", "UA\nSergii Kozlov", "UA\nVadim\nVovcherenko", "IndoPac Sales\nelianeyang\n(楊玲芝)", "IndoPac Sales\nRiley Huang\n(黃宇宣)", "IndoPac Sales\nJessie Chiang", "IndoPac Sales\nEric Lin\n(林子良)", "IndoPac Sales\nWinter Lee\n(李映呈)", "IndoPac Sales\nPhoenix Lai\n(賴俊諺)"],
+            
+            // 7th Row
+            ["Cust MB Planning\nAaron Chang\n(張學宇)", "Cust PM\nRick Chen\n(陳忠正)", "Cust PM\nJessica Chen\n(陳思靜)", "MNT Planning\nRyan Chang\n(張境勻)", "MNT Planning\nJacky Hou\n(侯佳良)", "MNT Planning\nCloud Yeh\n(葉彥廷)", "PJR\nHans Wang", "PJR\nSlava Huang", "PJR\nLisa Grchen", "AMU\nTaoufik El Kadiri", "FR/AMU\nGhazi Touhami", "AMU\nJosh Luo", "EU\nSean Yang", "IndoPac Sales\nKevin Chung", "PH\nPortia Lin", "PH\nDean Lu\n(盧育鼎)", "IndoPac Sales\nFabio Hsu\n(許勝杰)", "IndoPac Sales\nJason Wang\n(王政都)", "IndoPac Sales\nClaire Lin\n(林佳儒)"],
+            
+            // 6th Row
+            ["Cust PM\nHendry Hsai\n(蔡翰林)", "Cust RPM\nEric Chuang\n(莊智傑)", "Cust RPM\nRobert Wang\n(王俊文)", "Cust RPM\nHoward Chiu\n(邱柏豪)", "MNT RD PM\nRick Chen\n(陳俊屹)", "MNT Planning\nGahoo Liu\n(劉家甫)", "PJR\nArtem Kupkin", "PJR\nZoe Tseng", "CIS\nAndrey Berov", "EU\nCarolina Lu", "EU\nCindy Liao", "EU\nRambo", "VN\nHuy Nguyen", "VN\nQuyen Tang", "VN\nKevin Le\nTrung dung", "AE\nMartin Chiang", "AU\nKevin Chiang", "AU\nJohn Mou", "AU\nKen Sung"],
+            
+            // 5th Row
+            ["Cust PM\nColin Chen\n(陳振偉)", "Cust RD PM\nJoe Chou\n(周育如)", "Cust RD PM\nDenise Wu\n(吳濡伊)", "MNT RPM\nJudy Huang\n(黃語嫣)", "MNT RPM\nPeichen Chiang\n(姜佩辰)", "MNT RPM\nJason Chi\n(吉文瑋)", "USA\nVivien Chao", "USA\nClifford Chun", "USA\nHenry Chao", "USA\nThomas Lee", "USA\nDavid Chou", "CA\nKen Liu", "CA\nStephen Lin", "BP\nFran Lee\n(李妍蓉)", "BP\nJasper Yu\n(游志貿)", "BP\nPhil Lin\n(林晏緯)", "TH\nDavid Chen", "TH\nLuis Weng", "IndoPac Sales\nYvonne Lin"],
+            
+            // 4th Row
+            ["Cust RPM\nPeter Liao\n(廖偉迪)", "Cust RPM\nTrisha Chuang\n(莊琬筑)", "Cust RPM\nEthel Hsieh\n(謝欣妤)", "Cust RPM\nEunice Chang\n(張瑋珊)", "Cust RPM\nVivian Yang\n(楊玫芳)", "Cust PM\nBobby Yuan\n(袁鳳臨)", "LATAM\nDiego Gei", "MY\nHenry Chung", "ID\nMichael Liang", "MEA\nBryan Chen", "PH\nJessica Chen", "AU\nJerry Lu", "TW\nCalvin Chuang", "TW\nLeon Lin\n(林世宗)", "TW\nMickey Tsai\n(蔡順和)", "TW\nKaze Wu\n(吳綸凱)", "TW\nMichael Chen\n(陳弘勳)", "TW\nCarrie Tsai\n(蔡菁芬)", "TW\nNiki Lin\n(林書儀)"],
+            
+            // 3rd Row
+            ["PM\nIkari Lin\n(林立偉)", "S&D CM\nEd Tsai\n(蔡晴惟)", "Cust CM\nOlivia Chen\n(陳瀅綺)", "FAE\nJin Chih\n(劉京枝)", "Cust RD PM\nEric Lu\n(呂國威)", "Cust PM\nJoey Huang\n(黃祖沛)", "ES\nAlexey Timakov", "IT\nRoberto\nSaponieri", "SEETR/SEECZ\nCemil\nZenginel", "NEEPL/UA\nAleksandra\nAkonom", "Mystar\nAllen Liang", "KR\nBrian Kung", "JP\nRicky Chiang", "JP\nAubrey Lee", "JP\nHenry Liao", "Procurement\nVincent Lin\n(林哲宇)", "Procurement\nYvaine Yang\n(楊星儀)", "Corp\nFrank Huang\n(黃柏翰)", "Corp\nAnita Lin\n(林妤庭)"],
+            
+            // 2nd Row
+            ["DM\nLucas Wang\n(王志良)", "RD\nDuncan Chen\n(陳仲文)", "RD\nDavid Yu\n(余奇賢)", "RD PM\nMark Chang\n(張貫行)", "RD\nSynge Chang\n(張中行)", "RD PM\nAndrew Chang\n(張博雯)", "IndoPac\nTim Lee", "PRC\nWarner Wang", "EU/DE\nAkiang Chiu", "US\nAndy Tung", "PJR\nTony Yang", "UK\nKevin Yang", "FR\nRyan Cheng", "KR\nLance Na", "KR\nSherry Fang", "KR\nEsther Min", "KR\nClay Oh", "KR\nJune Lee", "IT Engineer\nWenshing\n(徐文星)"],
+            
+            // 1st Row
+            ["Cust\nKay Chen\n(陳芷蔚)", "Cust\nAlex Tsui\n(崔景賢)", "S&D\nArthur Wei\n(韋淳瀚)", "S&D\nFrancis Yang\n(楊子瑩)", "Operation\nSara Chung\n(鐘玉娟)", "RD\nJames Yeh\n(葉俊德)", "Ted", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Procurement\nMaggie Chen", "Boo An\nJoe Lee\n(李昭明)", "Boo An\nEthan Yang\n(楊明篤)", "BP\nWilson Tsai\n(蔡維新)", "Corp\nSam Chern\n(程惠正)", "IT Engineer\nAlton Huang\n(黃傳壽)", "IT Engineer\nEmily Wang\n(王怡萌)"]
+        ];
+
+        const grid = document.getElementById('seatMapGrid');
+
+        // 1. 生成第一列的橫向純數字欄目標籤 (1 ~ 19)
+        grid.appendChild(createCell("", "header-cell"));
+        for (let c = 1; c <= 19; c++) {
+            grid.appendChild(createCell(c, "header-cell"));
+        }
+
+        // 2. 依序生成 12th Row 到 1st Row
+        for (let r = 0; r < seatData.length; r++) {
+            const actualRowNum = 12 - r;
+            let suffix = "th";
+            if(actualRowNum === 1) suffix = "st";
+            if(actualRowNum === 2) suffix = "nd";
+            if(actualRowNum === 3) suffix = "rd";
+            
+            // 每列最左邊的 Row 標籤
+            grid.appendChild(createCell(actualRowNum + suffix + "\nRow", "row-label"));
+
+            // 生成該列的 19 個座位格子
+            for (let c = 0; c < seatData[r].length; c++) {
+                const info = seatData[r][c].trim();
+                const seatDiv = document.createElement('div');
+                seatDiv.className = 'seat';
+                
+                if (!info) {
+                    seatDiv.className += ' empty';
+                    seatDiv.innerText = '-';
+                } else if (info.toLowerCase() === 'reserved') {
+                    seatDiv.className += ' reserved';
+                    seatDiv.innerText = 'Reserved';
+                } else {
+                    seatDiv.innerText = info;
+                    // 保存座位詳細資訊給 JS 讀取
+                    seatDiv.setAttribute('data-search-text', info.toLowerCase());
+                    seatDiv.setAttribute('data-display-text', info);
+                    seatDiv.setAttribute('data-row', actualRowNum + suffix + " Row");
+                    seatDiv.setAttribute('data-col', c + 1);
+                }
+                grid.appendChild(seatDiv);
+            }
+        }
+
+        function createCell(text, className) {
+            const cell = document.createElement('div');
+            cell.className = className;
+            cell.innerText = text;
+            return cell;
+        }
+
+        // 3. 高亮比對與文字輸出功能
+        function highlightMap() {
+            const keyword = document.getElementById('mapSearch').value.trim().toLowerCase();
+            const seats = document.querySelectorAll('.seat[data-search-text]');
+            const resultPanel = document.getElementById('textResultPanel');
+            const resultContent = document.getElementById('textResultContent');
+
+            // 清空先前的文字結果
+            resultContent.innerHTML = '';
+
+            if (!keyword) {
+                seats.forEach(seat => seat.classList.remove('highlight'));
+                resultPanel.classList.remove('active');
+                return;
+            }
+
+            let matchCount = 0;
+            let htmlBuffer = '';
+
+            seats.forEach(seat => {
+                const fullText = seat.getAttribute('data-search-text');
+                const displayText = seat.getAttribute('data-display-text');
+                const rowInfo = seat.getAttribute('data-row');
+                const colInfo = seat.getAttribute('data-col');
+
+                const lines = fullText.split('\n');
+                const title = lines[0] ? lines[0].trim() : '';
+                const engName = lines[1] ? lines[1].trim() : '';
+                const chnName = lines[2] ? lines[2].trim() : '';
+
+                // 模糊匹配：只要各欄位有包含該關鍵字即判定成功
+                const isMatch = title.includes(keyword) || 
+                                engName.includes(keyword) || 
+                                chnName.includes(keyword) || 
+                                fullText.includes(keyword);
+
+                if (isMatch) {
+                    seat.classList.add('highlight');
+                    matchCount++;
+                    
+                    // 組合出你指定的格式：10th Row - 5 | 換行 完整詳細資訊
+                    htmlBuffer += `<div class="result-item"><strong>${rowInfo} - ${colInfo} |</strong>\n${displayText}</div>`;
+                } else {
+                    seat.classList.remove('highlight');
+                }
+            });
+
+            // 如果有找到結果，就將文字列表顯示出來
+            if (matchCount > 0) {
+                resultContent.innerHTML = htmlBuffer;
+                resultPanel.classList.add('active');
+            } else {
+                resultContent.innerHTML = '<div style="color: #64748b; font-size: 13px; text-align: center;">找不到相符的座位資訊 🥲</div>';
+                resultPanel.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
