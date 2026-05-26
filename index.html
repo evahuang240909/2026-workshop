@@ -58,54 +58,54 @@
     </div>
 
     <script>
-        // 最新核對修正版座位數據：每列陣列長度皆精準等於 19 欄
+        // 完全依據 image_6141af.png 1:1 還原的座位數據 (1~10列完全無空格滿載)
         const seatData = [
-            // 12th Row (1~13 欄為空，14~19 欄有員工)
+            // 12th Row: 1~13 欄全是空格，14~19 欄為 Cust CM
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "Cust CM\nJessica Chao\n(趙雨培)", "Cust CM\nTting Yin\n(尹婷)", "Cust CM\nRuby Luo\n(羅勻佐)", "Cust CM\nPenny Liao\n(廖珮妏)", "Cust CM\nJenn Cheng\n(鄭螢)", "Cust CM\nMimi Hung\n(洪冠嘉)"],
             
-            // 11th Row (1~6 主管，7~13 空，14~19 為 FAE/S&D)
+            // 11th Row: 1~6 主管，7~13 欄為空格，14~19 欄為 FAE 與 S&D CM
             ["DM\nPeggy Yang\n(楊珮綺)", "DM\nAnnie Wang\n(王暄晴)", "Operation\nCeline Shang\n(尚儀)", "Operation\nAimee Li\n(李秀娟)", "Operation\nVanessa Chuang\n(莊謹熒)", "Operation\nRuby Chang\n(張汝伊)", "", "", "", "", "", "", "", "FAE\nEric Lo\n(羅晧華)", "S&D CM\nClaire Lin\n(林宣慧)", "S&D CM\nEmma Chuang\n(莊詠華)", "S&D CM\nNicky Yang\n(楊蕓瀚)", "S&D CM\nElena Huang\n(黃子昀)", "S&D CM\nYen Chen\n(陳品諺)"],
             
-            // 10th Row
+            // 10th Row: 全滿 19 欄
             ["DM\nKelly Cho\n(卓芊孜)", "DM\nAnn Chien\n(簡婉婷)", "DM\nJill Lin\n(林欣宜)", "DM\nSarah Lin\n(林思妤)", "DM\nOmi Wang\n(王愛萍)", "DM\nSarah Chen\n(陳怡臻)", "S&D PM\nJean Shao\n(邵小真)", "S&D PM\nJeff Chou\n(周睿彬)", "S&D RD\nDanny Lu\n(呂少穎)", "S&D RD\nCarey Wu\n(吳科賢)", "S&D RD\nCloud Yu\n(游智鈞)", "FAE\nJason Chen\n(陳忠鑫)", "FAE\nJacky Chen\n(陳進輝)", "IndoPac PM\nAnnie Yang\n(楊安寧)", "S&D CM\nLeo Li\n(李韋賢)", "S&D CM\nCarina Hung\n(洪廷瑀)", "S&D CM\nParker Lee\n(李孟杰)", "IndoPac MKT\nJenny Tu\n(杜佩珊)", "IndoPac MKT\nJane Lee\n(李易臻)"],
             
-            // 9th Row
-            ["DM\nVera Chen\n(陳筱君)", "DM\nJenny Cheng\n(鄭宇彣)", "DT Planning\nDaniel Wu\n(吳慧德)", "DT Planning\nAllen Lee\n(李德育)", "DT PM\nJulie Lia\n(賴炴璇)", "PMKT\nManny Chang\n(張毅欽)", "DT PMKT\nFrank Ho\n(何銘峯)", "DT PMKT\nJerry Tsai\n(蔡志豪)", "Cust PMKT\nChris Peng\n(彭士豪)", "Cust PMKT\nRita Lin\n(林昱君)", "MNT PMKT\nUna Lee\n(李晨帆)", "PMKT\nMilia Lin\n(林子瑛)", "CZ\nPaul Liao", "IN\nShridhar Vidyadhar\nMagadum", "IN\nPankaj Narang", "IndoPac MKT\nShania Cheng\n(程雅歆)", "IndoPac MKT\nLeona Liu\n(柳虹伊)", "IndoPac MKT\nAdam Huang\n(黃宇宸)", "IndoPac MKT\nIrene Chien\n(簡玉晴)"],
+            // 9th Row: 全滿 19 欄 (包含 CPM junyechen 於第13欄)
+            ["DM\nVera Chen\n(陳筱君)", "DM\nJenny Cheng\n(鄭宇彣)", "DT Planning\nDaniel Wu\n(吳慧德)", "DT Planning\nAllen Lee\n(李德育)", "DT PM\nJulie Lia\n(賴炴璇)", "PMKT\nManny Chang\n(張毅欽)", "DT PMKT\nFrank Ho\n(何銘峯)", "DT PMKT\nJerry Tsai\n(蔡志豪)", "Cust PMKT\nChris Peng\n(彭士豪)", "Cust PMKT\nRita Lin\n(林昱君)", "MNT PMKT\nUna Lee\n(李晨帆)", "PMKT\nMilia Lin\n(林子瑛)", "CPM\nJunye Chen\n(陳俊曄)", "IN\nShridhar Vidyadhar\nMagadum", "IN\nPankaj Narang", "IndoPac MKT\nShania Cheng\n(程雅歆)", "IndoPac MKT\nLeona Liu\n(柳虹伊)", "IndoPac MKT\nAdam Huang\n(黃宇宸)", "IndoPac MKT\nIrene Chien\n(簡玉晴)"],
             
-            // 8th Row
+            // 8th Row: 全滿 19 欄
             ["Cust Sales\nVivian Fang\n(方郁寧)", "Cust Sales\nMoses Tsai\n(蔡裕翔)", "Cust PM\nKai Hung\n(洪新凱)", "Cust RD PM\nEwan Chang\n(張富傑)", "DT RPM\nSabrina Chiang\n(江之瑜)", "DT RPM\nDavid Wu\n(吳壹豐)", "UK\nTina Chuang", "UK\nTerry Feng", "UK\nAdrian Liu", "UK\nPin Hsuan Shao", "TR\nMutlu Akisan", "UA\nSergii Kozlov", "UA\nVadim\nVovcherenko", "IndoPac\nelianeyang\n(楊玲芝)", "IndoPac\nRiley Huang\n(黃宇宣)", "IndoPac\nJessie Chiang", "IndoPac\nEric Lin\n(林子良)", "IndoPac\nWinter Lee\n(李映呈)", "IndoPac\nPhoenix Lai\n(賴俊諺)"],
             
-            // 7th Row
-            ["Cust PM\nAaron Chang\n(張學宇)", "Cust PM\nRick Chen\n(陳忠正)", "Cust PM\nJessica Chen\n(陳思靜)", "MNT Planning\nRyan Chang\n(張境勻)", "MNT Planning\nJacky Hou\n(侯佳良)", "MNT Planning\nCloud Yeh\n(葉彥廷)", "PJR\nHans Wang", "PJR\nSlava Huang", "PJR\nLisa Grchen", "AMU\nTaoufik El Kadiri", "FR/AMU\nGhazi Touhami", "AMU\nJosh Luo", "EU\nSean Yang", "IndoPac\nKevin Chung", "PH\nPortia Lin", "PH\nDean Lu\n(盧育鼎)", "IndoPac\nFabio Hsu\n(許勝杰)", "IndoPac\nJason Wang\n(王政都)", "IndoPac\nClaire Lin\n(林佳儒)"],
+            // 7th Row: 全滿 19 欄
+            ["Cust PM\nAaron Chang\n(張學宇)", "Cust PM\nRick Chen\n(陳忠正)", "Cust PM\nJessica Chen\n(陳思靜)", "MNT Planning\nRyan Chang\n(張境勻)", "MNT Planning\nJacky Hou\n(侯佳良)", "MNT Planning\nCloud Yeh\n(葉彥廷)", "PJR\nSlava Huang", "PJR\nLisa Grchen", "AMU\nTaoufik El Kadiri", "FR/AMU\nGhazi Touhami", "AMU\nJosh Luo", "EU\nSean Yang", "CZ\nPaul Liao", "IndoPac\nKevin Chung", "PH\nPortia Lin", "PH\nDean Lu\n(盧育鼎)", "IndoPac\nFabio Hsu\n(許勝杰)", "IndoPac\nJason Wang\n(王政都)", "IndoPac\nClaire Lin\n(林佳儒)"],
             
-            // 6th Row
+            // 6th Row: 全滿 19 欄
             ["Cust PM\nHendry Hsai\n(蔡翰林)", "Cust RPM\nEric Chuang\n(莊智傑)", "Cust RPM\nRobert Wang\n(王俊文)", "Cust RPM\nHoward Chiu\n(邱柏豪)", "MNT PM\nRick Chen\n(陳俊屹)", "MNT Planning\nGahoo Liu\n(劉家甫)", "PJR\nArtem Kupkin", "PJR\nZoe Tseng", "CIS\nAndrey Berov", "EU\nCarolina Lu", "EU\nCindy Liao", "EU\nRambo", "VN\nHuy Nguyen", "VN\nQuyen Tang", "VN\nKevin Le\nTrung dung", "AE\nMartin Chiang", "AU\nKevin Chiang", "AU\nJohn Mou", "AU\nKen Sung"],
             
-            // 5th Row
-            ["Cust PM\nColin Chen\n(陳振偉)", "Cust PM\nJoe Chou\n(周育如)", "Cust PM\nDenise Wu\n(吳濡伊)", "MNT RPM\nJudy Huang\n(黃語嫣)", "MNT RPM\nPeichen Chiang\n(姜佩辰)", "MNT RPM\nJason Chi\n(吉文瑋)", "USA\nVivien Chao", "USA\nClifford Chun", "USA\nHenry Chao", "USA\nThomas Lee", "USA\nDavid Chou", "CA\nKen Liu", "CA\nStephen Lin", "BP\nJasper Yu\n(游志貿)", "BP\nPhil Lin\n(林晏緯)", "Procurement\nWendy Hsu\n(許雯迪)", "TH\nDavid Chen", "TH\nLuis Weng", "IndoPac\nYvonne Lin"],
+            // 5th Row: 全滿 19 欄 (已拔除空格！Jason Chi 右方直接緊扣 PJR Hans Wang)
+            ["Cust PM\nColin Chen\n(陳振偉)", "Cust PM\nJoe Chou\n(周育如)", "Cust PM\nDenise Wu\n(吳濡伊)", "MNT RPM\nJudy Huang\n(黃語嫣)", "MNT RPM\nPeichen Chiang\n(姜佩辰)", "MNT RPM\nJason Chi\n(吉文瑋)", "PJR\nHans Wang", "USA\nClifford Chun", "USA\nHenry Chao", "USA\nThomas Lee", "USA\nDavid Chou", "CA\nKen Liu", "CA\nStephen Lin", "BP\nJasper Yu\n(游志貿)", "BP\nPhil Lin\n(林晏緯)", "Procurement\nWendy Hsu\n(許雯迪)", "TH\nDavid Chen", "TH\nLuis Weng", "IndoPac\nYvonne Lin"],
             
-            // 4th Row
-            ["Cust RPM\nPeter Liao\n(廖偉迪)", "Cust RPM\nTrisha Chuang\n(莊琬筑)", "Cust RPM\nEthel Hsieh\n(謝欣妤)", "Cust RPM\nEunice Chang\n(張瑋珊)", "Cust RPM\nVivian Yang\n(楊玫芳)", "Cust PM\nBobby Yuan\n(袁鳳臨)", "LATAM\nDiego Gei", "MY\nHenry Chung", "ID\nMichael Liang", "MEA\nBryan Chen", "PH\nJessica Chen", "AU\nJerry Lu", "TW\nCalvin Chuang", "TW\nLeon Lin\n(林世宗)", "TW\nMickey Tsai\n(蔡順和)", "TW\nKaze Wu\n(吳綸凱)", "TW\nMichael Chen\n(陳弘勳)", "TW\nCarrie Tsai\n(蔡菁芬)", "TW\nNiki Lin\n(林書儀)"],
+            // 4th Row: 全滿 19 欄
+            ["Cust RPM\nPeter Liao\n(廖偉迪)", "Cust RPM\nTrisha Chuang\n(莊琬筑)", "Cust RPM\nEthel Hsieh\n(謝欣妤)", "Cust RPM\nEunice Chang\n(張瑋珊)", "Cust RPM\nVivian Yang\n(楊玫芳)", "Cust PM\nBobby Yuan\n(袁鳳臨)", "USA\nVivien Chao", "LATAM\nDiego Gei", "MY\nHenry Chung", "ID\nMichael Liang", "MEA\nBryan Chen", "PH\nJessica Chen", "AU\nJerry Lu", "TW\nCalvin Chuang", "TW\nLeon Lin\n(林世宗)", "TW\nMickey Tsai\n(蔡順和)", "TW\nKaze Wu\n(吳綸凱)", "TW\nMichael Chen\n(陳弘勳)", "TW\nCarrie Tsai\n(蔡菁芬)", "TW\nNiki Lin\n(林書儀)"],
             
-            // 3rd Row
-            ["S&D CM\nEd Tsai\n(蔡晴惟)", "Cust CM\nOlivia Chen\n(陳瀅綺)", "RD\nToppc Lin\n(林源銘)", "FAE\nJin Chih\n(劉京枝)", "Cust PM\nEric Lu\n(呂國威)", "Cust PM\nJoey Huang\n(黃祖沛)", "ES\nAlexey Timakov", "IT\nRoberto\nSaponieri", "SEETR/SEECZ\nCemil\nZenginel", "NEEPL/UA\nAleksandra\nAkonom", "Mystar\nAllen Liang", "KR\nBrian Kung", "JP\nRicky Chiang", "JP\nAubrey Lee", "JP\nHenry Liao", "Procurement\nVincent Lin\n(林哲宇)", "Procurement\nYvaine Yang\n(楊星儀)", "Corp\nFrank Huang\n(黃柏翰)", "Corp\nAnita Lin\n(林妤庭)"],
+            // 3rd Row: 全滿 19 欄
+            ["S&D CM\nEd Tsai\n(蔡晴惟)", "Cust CM\nOlivia Chen\n(陳瀅綺)", "RD\nToppc Lin\n(林源銘)", "FAE\nJin Chih\n(劉京枝)", "Cust PM\nEric Lu\n(呂國威)", "Cust PM\nJoey Huang\n(黃祖沛)", "IT\nRoberto\nSaponieri", "SEETR/SEECZ\nCemil\nZenginel", "NEEPL/UA\nAleksandra\nAkonom", "Mystar\nAllen Liang", "KR\nBrian Kung", "JP\nRicky Chiang", "TW\nCalvin Chuang", "JP\nAubrey Lee", "JP\nHenry Liao", "Procurement\nVincent Lin\n(林哲宇)", "Procurement\nYvaine Yang\n(楊星儀)", "Corp\nFrank Huang\n(黃柏翰)", "Corp\nAnita Lin\n(林妤庭)"],
             
-            // 2nd Row
+            // 2nd Row: 全滿 19 欄
             ["DM\nLucas Wang\n(王志良)", "PMKT\nIkari Lin\n(林立偉)", "RD\nDuncan Chen\n(陳仲文)", "RD\nDavid Yu\n(余奇賢)", "RD\nMarkg Chang\n(張貫行)", "Cust PM\nAndrew Chang\n(張博雯)", "IndoPac\nTim Lee", "PRC\nWarner Wang", "EU/DE\nAkiang Chiu", "US\nAndy Tung", "PJR\nTony Yang", "UK\nKevin Yang", "FR\nRyan Cheng", "KR\nLance Na", "KR\nSherry Fang", "KR\nEsther Min", "KR\nClay Oh", "KR\nJune Lee", "IT Engineer\nWenshing\n(徐文星)"],
             
-            // 1st Row
+            // 1st Row: 全滿 19 欄
             ["Cust\nKay Chen\n(陳芷蔚)", "Cust\nAlex Tsui\n(崔景賢)", "S&D\nArthur Wei\n(韋淳瀚)", "S&D\nFrancis Yang\n(楊子瑩)", "Operation\nSara Chung\n(鐘玉娟)", "RD\nJames Yeh\n(葉俊德)", "Ted", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Procurement\nMaggie Chen", "Boo An\nJoe Lee\n(李昭明)", "BP\nWilson Tsai\n(蔡維新)", "BP\nFran Lee\n(李妍蓉)", "Corp\nSam Chern\n(程惠正)", "IT Engineer\nAlton Huang\n(黃傳壽)", "IT Engineer\nEmily Wang\n(王怡萌)"]
         ];
 
         const grid = document.getElementById('seatMapGrid');
 
-        // 1. 生成第一列的橫向純數字欄目標籤 (1 ~ 19)
+        // 1. 生成橫向欄位數字標籤 (1 ~ 19)
         grid.appendChild(createCell("", "header-cell"));
         for (let c = 1; c <= 19; c++) {
             grid.appendChild(createCell(c, "header-cell"));
         }
 
-        // 2. 依序生成 12th Row 到 1st Row
+        // 2. 依序渲染 12th Row 到 1st Row
         for (let r = 0; r < seatData.length; r++) {
             const actualRowNum = 12 - r;
             let suffix = "th";
@@ -113,10 +113,10 @@
             if(actualRowNum === 2) suffix = "nd";
             if(actualRowNum === 3) suffix = "rd";
             
-            // 每列最左邊的 Row 標籤
+            // 左側 Row 直欄標籤
             grid.appendChild(createCell(actualRowNum + suffix + "\nRow", "row-label"));
 
-            // 安全上限：每行嚴格只渲染 19 格
+            // 嚴格渲染 19 格，保證格子、空位完全對齊不偏移
             for (let c = 0; c < 19; c++) {
                 const rawInfo = seatData[r][c] || "";
                 const info = rawInfo.trim();
@@ -147,7 +147,7 @@
             return cell;
         }
 
-        // 3. 搜尋功能
+        // 3. 搜尋高亮與動態文字版結果顯示
         function highlightMap() {
             const keyword = document.getElementById('mapSearch').value.trim().toLowerCase();
             const seats = document.querySelectorAll('.seat[data-search-text]');
@@ -171,20 +171,12 @@
                 const rowInfo = seat.getAttribute('data-row');
                 const colInfo = seat.getAttribute('data-col');
 
-                const lines = fullText.split('\n');
-                const title = lines[0] ? lines[0].trim() : '';
-                const engName = lines[1] ? lines[1].trim() : '';
-                const chnName = lines[2] ? lines[2].trim() : '';
-
-                const isMatch = title.includes(keyword) || 
-                                engName.includes(keyword) || 
-                                chnName.includes(keyword) || 
-                                fullText.includes(keyword);
+                const isMatch = fullText.includes(keyword);
 
                 if (isMatch) {
                     seat.classList.add('highlight');
                     matchCount++;
-                    htmlBuffer += `<div class="result-item"><strong>${rowInfo} - ${colInfo}欄 |</strong>\n${displayText}</div>`;
+                    htmlBuffer += `<div class="result-item"><strong>${rowInfo} - 第 ${colInfo} 欄 |</strong>\n${displayText}</div>`;
                 } else {
                     seat.classList.remove('highlight');
                 }
