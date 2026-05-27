@@ -58,7 +58,7 @@
     </div>
 
     <script>
-        // 完全依據 image_6141af.png 1:1 還原的座位數據 (1~10列完全無空格滿載)
+        // 嚴格依據全新圖檔 image_16a16f.jpg 1:1 還原的 12列 x 19欄 矩陣數據
         const seatData = [
             // 12th Row: 1~13 欄全是空格，14~19 欄為 Cust CM
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "Cust CM\nJessica Chao\n(趙雨培)", "Cust CM\nTting Yin\n(尹婷)", "Cust CM\nRuby Luo\n(羅勻佐)", "Cust CM\nPenny Liao\n(廖珮妏)", "Cust CM\nJenn Cheng\n(鄭螢)", "Cust CM\nMimi Hung\n(洪冠嘉)"],
@@ -69,11 +69,11 @@
             // 10th Row: 全滿 19 欄
             ["DM\nKelly Cho\n(卓芊孜)", "DM\nAnn Chien\n(簡婉婷)", "DM\nJill Lin\n(林欣宜)", "DM\nSarah Lin\n(林思妤)", "DM\nOmi Wang\n(王愛萍)", "DM\nSarah Chen\n(陳怡臻)", "S&D PM\nJean Shao\n(邵小真)", "S&D PM\nJeff Chou\n(周睿彬)", "S&D RD\nDanny Lu\n(呂少穎)", "S&D RD\nCarey Wu\n(吳科賢)", "S&D RD\nCloud Yu\n(游智鈞)", "FAE\nJason Chen\n(陳忠鑫)", "FAE\nJacky Chen\n(陳進輝)", "IndoPac PM\nAnnie Yang\n(楊安寧)", "S&D CM\nLeo Li\n(李韋賢)", "S&D CM\nCarina Hung\n(洪廷瑀)", "S&D CM\nParker Lee\n(李孟杰)", "IndoPac MKT\nJenny Tu\n(杜佩珊)", "IndoPac MKT\nJane Lee\n(李易臻)"],
             
-            // 9th Row: 全滿 19 欄 (包含 CPM junyechen 於第13欄)
-            ["DM\nVera Chen\n(陳筱君)", "DM\nJenny Cheng\n(鄭宇彣)", "DT Planning\nDaniel Wu\n(吳慧德)", "DT Planning\nAllen Lee\n(李德育)", "DT PM\nJulie Lia\n(賴炴璇)", "PMKT\nManny Chang\n(張毅欽)", "DT PMKT\nFrank Ho\n(何銘峯)", "DT PMKT\nJerry Tsai\n(蔡志豪)", "Cust PMKT\nChris Peng\n(彭士豪)", "Cust PMKT\nRita Lin\n(林昱君)", "MNT PMKT\nUna Lee\n(李晨帆)", "PMKT\nMilia Lin\n(林子瑛)", "CPM\nJunye Chen\n(陳俊曄)", "IN\nShridhar Vidyadhar\nMagadum", "IN\nPankaj Narang", "IndoPac MKT\nShania Cheng\n(程雅歆)", "IndoPac MKT\nLeona Liu\n(柳虹伊)", "IndoPac MKT\nAdam Huang\n(黃宇宸)", "IndoPac MKT\nIrene Chien\n(簡玉晴)"],
+            // 9th Row: 全滿 19 欄
+            ["DM\nVera Chen\n(陳筱君)", "DM\nJenny Cheng\n(鄭宇彣)", "DT Planning\nDaniel Wu\n(吳慧德)", "DT Planning\nAllen Lee\n(李德育)", "DT PM\nJulie Lia\n(賴炴璇)", "PMKT\nManny Chang\n(張毅欽)", "DT PMKT\nFrank Ho\n(何銘峯)", "DT PMKT\nJerry Tsai\n(蔡志豪)", "Cust PMKT\nChris Peng\n(彭士豪)", "Cust PMKT\nRita Lin\n(林昱君)", "MNT PMKT\nUna Lee\n(李晨帆)", "PMKT\nMilia Lin\n(林子瑛)", "CPM\njunyechen\n(陳俊曄)", "IN\nShridhar Vidyadhar\nMagadum", "IN\nPankaj Narang", "IndoPac MKT\nShania Cheng\n(程雅歆)", "IndoPac MKT\nLeona Liu\n(柳虹伊)", "IndoPac MKT\nAdam Huang\n(黃宇宸)", "IndoPac MKT\nIrene Chien\n(簡玉晴)"],
             
             // 8th Row: 全滿 19 欄
-            ["Cust Sales\nVivian Fang\n(方郁寧)", "Cust Sales\nMoses Tsai\n(蔡裕翔)", "Cust PM\nKai Hung\n(洪新凱)", "Cust RD PM\nEwan Chang\n(張富傑)", "DT RPM\nSabrina Chiang\n(江之瑜)", "DT RPM\nDavid Wu\n(吳壹豐)", "UK\nTina Chuang", "UK\nTerry Feng", "UK\nAdrian Liu", "UK\nPin Hsuan Shao", "TR\nMutlu Akisan", "UA\nSergii Kozlov", "UA\nVadim\nVovcherenko", "IndoPac\nelianeyang\n(楊玲芝)", "IndoPac\nRiley Huang\n(黃宇宣)", "IndoPac\nJessie Chiang", "IndoPac\nEric Lin\n(林子良)", "IndoPac\nWinter Lee\n(李映呈)", "IndoPac\nPhoenix Lai\n(賴俊諺)"],
+            ["Cust Sales\nVivian Fang\n(方郁寧)", "Cust Sales\nMoses Tsai\n(蔡裕翔)", "Cust PM\nKai Hung\n(洪新凱)", "Cust RD PM\nEwan Chang\n(張富傑)", "DT RPM\nSabrina Chiang\n(江之瑜)", "DT RPM\nDavid Wu\n(吳壹豐)", "UK\nTina Chuang", "UK\nTerry Feng", "UK\nAdrian Liu", "UK\nPin Hsuan Shao", "TR\nMutlu Akisan", "UA\nSergii Kozlov", "UA\nVadim\nVovcherenko", "IndoPac\nEliane Yang\n(楊玲芝)", "IndoPac\nRiley Huang\n(黃宇宣)", "IndoPac\nJessie Chiang", "IndoPac\nEric Lin\n(林子良)", "IndoPac\nWinter Lee\n(李映呈)", "IndoPac\nPhoenix Lai\n(賴俊諺)"],
             
             // 7th Row: 全滿 19 欄
             ["Cust PM\nAaron Chang\n(張學宇)", "Cust PM\nRick Chen\n(陳忠正)", "Cust PM\nJessica Chen\n(陳思靜)", "MNT Planning\nRyan Chang\n(張境勻)", "MNT Planning\nJacky Hou\n(侯佳良)", "MNT Planning\nCloud Yeh\n(葉彥廷)", "PJR\nSlava Huang", "PJR\nLisa Grchen", "AMU\nTaoufik El Kadiri", "FR/AMU\nGhazi Touhami", "AMU\nJosh Luo", "EU\nSean Yang", "CZ\nPaul Liao", "IndoPac\nKevin Chung", "PH\nPortia Lin", "PH\nDean Lu\n(盧育鼎)", "IndoPac\nFabio Hsu\n(許勝杰)", "IndoPac\nJason Wang\n(王政都)", "IndoPac\nClaire Lin\n(林佳儒)"],
@@ -81,7 +81,7 @@
             // 6th Row: 全滿 19 欄
             ["Cust PM\nHendry Hsai\n(蔡翰林)", "Cust RPM\nEric Chuang\n(莊智傑)", "Cust RPM\nRobert Wang\n(王俊文)", "Cust RPM\nHoward Chiu\n(邱柏豪)", "MNT PM\nRick Chen\n(陳俊屹)", "MNT Planning\nGahoo Liu\n(劉家甫)", "PJR\nArtem Kupkin", "PJR\nZoe Tseng", "CIS\nAndrey Berov", "EU\nCarolina Lu", "EU\nCindy Liao", "EU\nRambo", "VN\nHuy Nguyen", "VN\nQuyen Tang", "VN\nKevin Le\nTrung dung", "AE\nMartin Chiang", "AU\nKevin Chiang", "AU\nJohn Mou", "AU\nKen Sung"],
             
-            // 5th Row: 全滿 19 欄 (已拔除空格！Jason Chi 右方直接緊扣 PJR Hans Wang)
+            // 5th Row: 全滿 19 欄 (1-10列無空格，Jason Chi 旁緊鄰 PJR Hans Wang)
             ["Cust PM\nColin Chen\n(陳振偉)", "Cust PM\nJoe Chou\n(周育如)", "Cust PM\nDenise Wu\n(吳濡伊)", "MNT RPM\nJudy Huang\n(黃語嫣)", "MNT RPM\nPeichen Chiang\n(姜佩辰)", "MNT RPM\nJason Chi\n(吉文瑋)", "PJR\nHans Wang", "USA\nClifford Chun", "USA\nHenry Chao", "USA\nThomas Lee", "USA\nDavid Chou", "CA\nKen Liu", "CA\nStephen Lin", "BP\nJasper Yu\n(游志貿)", "BP\nPhil Lin\n(林晏緯)", "Procurement\nWendy Hsu\n(許雯迪)", "TH\nDavid Chen", "TH\nLuis Weng", "IndoPac\nYvonne Lin"],
             
             // 4th Row: 全滿 19 欄
@@ -91,7 +91,7 @@
             ["S&D CM\nEd Tsai\n(蔡晴惟)", "Cust CM\nOlivia Chen\n(陳瀅綺)", "RD\nToppc Lin\n(林源銘)", "FAE\nJin Chih\n(劉京枝)", "Cust PM\nEric Lu\n(呂國威)", "Cust PM\nJoey Huang\n(黃祖沛)", "IT\nRoberto\nSaponieri", "SEETR/SEECZ\nCemil\nZenginel", "NEEPL/UA\nAleksandra\nAkonom", "Mystar\nAllen Liang", "KR\nBrian Kung", "JP\nRicky Chiang", "TW\nCalvin Chuang", "JP\nAubrey Lee", "JP\nHenry Liao", "Procurement\nVincent Lin\n(林哲宇)", "Procurement\nYvaine Yang\n(楊星儀)", "Corp\nFrank Huang\n(黃柏翰)", "Corp\nAnita Lin\n(林妤庭)"],
             
             // 2nd Row: 全滿 19 欄
-            ["DM\nLucas Wang\n(王志良)", "PMKT\nIkari Lin\n(林立偉)", "RD\nDuncan Chen\n(陳仲文)", "RD\nDavid Yu\n(余奇賢)", "RD\nMarkg Chang\n(張貫行)", "Cust PM\nAndrew Chang\n(張博雯)", "IndoPac\nTim Lee", "PRC\nWarner Wang", "EU/DE\nAkiang Chiu", "US\nAndy Tung", "PJR\nTony Yang", "UK\nKevin Yang", "FR\nRyan Cheng", "KR\nLance Na", "KR\nSherry Fang", "KR\nEsther Min", "KR\nClay Oh", "KR\nJune Lee", "IT Engineer\nWenshing\n(徐文星)"],
+            ["DM\nLucas Wang\n(王志良)", "PMKT\nIkari Lin\n(林立偉)", "RD\nDuncan Chen\n(陳仲文)", "RD\nDavid Yu\n(余奇賢)", "RD\nMark Chang\n(張貫行)", "Cust PM\nAndrew Chang\n(張博雯)", "IndoPac\nTim Lee", "PRC\nWarner Wang", "EU/DE\nAkiang Chiu", "US\nAndy Tung", "PJR\nTony Yang", "UK\nKevin Yang", "FR\nRyan Cheng", "KR\nLance Na", "KR\nSherry Fang", "KR\nEsther Min", "KR\nClay Oh", "KR\nJune Lee", "IT Engineer\nWenshing\n(徐文星)"],
             
             // 1st Row: 全滿 19 欄
             ["Cust\nKay Chen\n(陳芷蔚)", "Cust\nAlex Tsui\n(崔景賢)", "S&D\nArthur Wei\n(韋淳瀚)", "S&D\nFrancis Yang\n(楊子瑩)", "Operation\nSara Chung\n(鐘玉娟)", "RD\nJames Yeh\n(葉俊德)", "Ted", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Procurement\nMaggie Chen", "Boo An\nJoe Lee\n(李昭明)", "BP\nWilson Tsai\n(蔡維新)", "BP\nFran Lee\n(李妍蓉)", "Corp\nSam Chern\n(程惠正)", "IT Engineer\nAlton Huang\n(黃傳壽)", "IT Engineer\nEmily Wang\n(王怡萌)"]
